@@ -9,10 +9,8 @@ export default class Dashboard extends React.Component {
         character: null,
         lastGameKills: null,
         lastGameDeaths: null,
-        lastGameAssists: 3,
+        lastGameAssists: null,
       },
-      asdf: null
-
     };
   }
 

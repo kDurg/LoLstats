@@ -5,13 +5,30 @@ import HeaderJumbotron from './Components/HeaderJumbotron';
 import NavBar from './Components/NavBar';
 import API from './utilities/API';
 
-import HomeImage from './assets/dragonImage.jpg'
+import HomeImage from './assets/dragonImage.jpg';
 import Dashboard from './Pages/Dashboard';
-
+import SummonerNameSearch from './Components/SummonerNameSearch';
 
 class App extends Component {
+  
+  componentDidMount() {
+    console.log(this.state)
+  }
+
+  inputSummonerName() {
+    let updatedUserName = document.getElementById('inputSummonerName').value;
+    this.setState({ userName: updatedUserName },
+      () => API.getSummonerID(updatedUserName)
+    );
+  }
+  
   state = {
-    userName: 'kDurg',
+    userName: null,
+    accountID: null,
+    id: null,
+    profileIconId: null,
+    userLevel: null, 
+    lastUpdated: null,
     currentPage: null,
     currentPageHeaderImage: HomeImage,
   }
@@ -21,7 +38,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
         </header>
-        <body>
+        <>
           <NavBar 
             userName= {this.state.userName}/>
           <HeaderJumbotron
@@ -29,10 +46,15 @@ class App extends Component {
             alt="HeaderImage"
             headlineText={`Welcome ${this.state.userName}`}
           />
+          <SummonerNameSearch 
+            type='text' 
+            id='inputSummonerName' 
+            placeholder='Summoner Name'
+            onClick = {this.inputSummonerName.bind(this)}/>
           <Dashboard 
             userName={this.state.userName}
           />
-        </body>
+        </>
       </div>
     );
   }
