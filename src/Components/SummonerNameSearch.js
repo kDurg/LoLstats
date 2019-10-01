@@ -8,7 +8,10 @@ const summonerNameSearch = (props) => {
       <Col>
         <Form>
           <FormGroup>
-            <Input type={props.type} id={props.id} placeholder={props.placeholder} />
+            <Input 
+              type={props.type} 
+              id={props.id} 
+              placeholder={props.placeholder} />
           </FormGroup>
         </Form>
       </Col>

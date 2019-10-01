@@ -1,33 +1,32 @@
 import React from 'react';
 
+import FormControlCard from '../Components/FormControlCard'
+
 export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: this.props.userName,
-      lastGame: {
-        character: null,
-        lastGameKills: null,
-        lastGameDeaths: null,
-        lastGameAssists: null,
+      games: {
+        lastGame: {
+          character: null,
+          lastGameAssists: null,
+          lastGameDeaths: null,
+          lastGameKills: null,
+        }
       },
+      player: {
+        userName: this.props.userName,
+      }
     };
   }
 
   render() {
     return (
-      <div>
-        <h1>Most recent Game</h1>
-        <h3>Character</h3>
-          <h6>Character: </h6>
-          <h6>KDA: 
-            Kills: {this.state.lastGame.lastGameKills}
-            Deaths: {this.state.lastGame.lastGameDeaths} 
-            Assists: {this.state.lastGame.lastGameAssists}
-            </h6>
-        <p>Username: {this.state.userName}</p>
-
-      </div>
+      <FormControlCard
+        games={this.state.games}
+        player={this.state.player}
+        type='quickRecentStats'
+      />
     )
   }
   

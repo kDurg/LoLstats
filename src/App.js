@@ -11,26 +11,33 @@ import SummonerNameSearch from './Components/SummonerNameSearch';
 
 class App extends Component {
   
-  componentDidMount() {
-    console.log(this.state)
-  }
-
-  inputSummonerName() {
-    let updatedUserName = document.getElementById('inputSummonerName').value;
-    this.setState({ userName: updatedUserName },
-      () => API.getSummonerID(updatedUserName)
-    );
-  }
-  
   state = {
-    userName: null,
-    accountID: null,
-    id: null,
-    profileIconId: null,
-    userLevel: null, 
-    lastUpdated: null,
     currentPage: null,
     currentPageHeaderImage: HomeImage,
+    data: {
+      userName: null,
+      accountID: null,
+      id: null,
+      profileIconId: null,
+      userLevel: null, 
+      lastUpdated: null,
+    },
+  }
+
+  componentDidMount() {
+    // console.log('component did mount state: ', this.state);
+  }
+
+  async inputSummonerName() {
+
+    let updatedUserName = document.getElementById('inputSummonerName').value;
+    const apiCall = await API.getSummonerID(updatedUserName);
+        
+    console.log('this is the api call', apiCall)
+
+    // this.setState({
+    //   userName: updatedUserName
+    // });
   }
 
   render() {
@@ -40,18 +47,20 @@ class App extends Component {
         </header>
         <>
           <NavBar 
-            userName= {this.state.userName}/>
+            userName= {this.state.userName}
+          />
           <HeaderJumbotron
             imgSrc={this.state.currentPageHeaderImage}
             alt="HeaderImage"
             headlineText={`Welcome ${this.state.userName}`}
           />
-          <SummonerNameSearch 
-            type='text' 
-            id='inputSummonerName' 
+          <SummonerNameSearch
+            id='inputSummonerName'
+            onClick = {this.inputSummonerName}
             placeholder='Summoner Name'
-            onClick = {this.inputSummonerName.bind(this)}/>
-          <Dashboard 
+            type='text'
+          />
+          <Dashboard
             userName={this.state.userName}
           />
         </>
