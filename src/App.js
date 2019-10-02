@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
+import axios from "axios";
 
 import HeaderJumbotron from './Components/HeaderJumbotron';
 import NavBar from './Components/NavBar';
-import API from './utilities/API';
 
 import HomeImage from './assets/dragonImage.jpg';
 import Dashboard from './Pages/Dashboard';
-import SummonerNameSearch from './Components/SummonerNameSearch';
 
 class App extends Component {
-  
   state = {
     currentPage: null,
     currentPageHeaderImage: HomeImage,
@@ -19,7 +17,7 @@ class App extends Component {
       accountID: null,
       id: null,
       profileIconId: null,
-      userLevel: null, 
+      summonerLevel: null, 
       lastUpdated: null,
     },
   }
@@ -28,25 +26,40 @@ class App extends Component {
     // console.log('component did mount state: ', this.state);
   }
 
-  async inputSummonerName() {
+  inputSummonerName(userName) {
 
-    let updatedUserName = document.getElementById('inputSummonerName').value;
-    const apiCall = await API.getSummonerID(updatedUserName);
-        
-    console.log('this is the api call', apiCall)
+    const baseURL = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + userName + '?api_key='
+    const corsAnywhere = 'https://cors-anywhere.herokuapp.com/'
+    const apiKey = 'RGAPI-91e93f23-918f-422b-9851-ebfced6684c6';
+    const summonerByName = corsAnywhere + baseURL + apiKey;
 
-    // this.setState({
-    //   userName: updatedUserName
-    // });
+    axios.get(summonerByName)
+      .then(function (response) {
+        console.log('Axios response: ', response.status)
+        if (response.status === 200){
+          this.setState({
+            accountID: response.data.accountID,
+            id: response.data.id,
+            userName: response.data.name,
+            profileIconId: response.data.profileIconId,
+            lastUpdated: response.data.revisionDate,
+            summonerLevel: response.data.summonerLevel
+          });
+        }
+      })
+      .catch (function(err) {
+        console.log(err)
+      })
+    
   }
 
   render() {
+    
     return (
       <div className="App">
-        <header className="App-header">
-        </header>
+        <header className="App-header"></header>
         <>
-          <NavBar 
+          <NavBar
             userName= {this.state.userName}
           />
           <HeaderJumbotron
@@ -54,13 +67,8 @@ class App extends Component {
             alt="HeaderImage"
             headlineText={`Welcome ${this.state.userName}`}
           />
-          <SummonerNameSearch
-            id='inputSummonerName'
-            onClick = {this.inputSummonerName}
-            placeholder='Summoner Name'
-            type='text'
-          />
           <Dashboard
+            inputSummonerName={(data)=>this.inputSummonerName(data)}
             userName={this.state.userName}
           />
         </>
