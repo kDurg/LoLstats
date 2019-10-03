@@ -1,11 +1,10 @@
-.App {
-  text-align: center;
-}
+/* .root{
+  align-items: center;
+  justify-content: center;
+} */
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.App {
+  width: 95vw;
 }
 
 .App-header {
@@ -25,8 +24,7 @@
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
-  }
-  to {
+  } to {
     transform: rotate(360deg);
   }
 }
@@ -42,7 +40,7 @@
 }
 
 .headerJumbotron {
-  width: 100vw;
+  width: 100%;
   height: auto;
   text-align: center;
   margin: 0px;
@@ -50,7 +48,7 @@
 }
 
 #jumboimage {
-  width: 100vw;
+  width: 100%;
   height: auto;
   background-size: cover;
   background-position: center;
