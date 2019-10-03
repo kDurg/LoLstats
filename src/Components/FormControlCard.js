@@ -20,10 +20,10 @@ const FormControlCard = (props) => {
 						</thead>
 						<tbody>
 							<tr>
-								<td>{props.games.lastGame.lastGameKills}</td>
-								<td>{props.games.lastGame.lastGameDeaths}</td>
-								<td>{props.games.lastGame.lastGameAssists}</td>
-								<td>{props.games.lastGame.lastGameKills}/{props.games.lastGame.lastGameDeaths}</td>
+								{/* <td>{props.games[0]}</td>
+								<td>{props.games[0]}</td>
+								<td>{props.games[0]}</td>
+								<td>{props.games[0]}/{props.games.lastGame.lastGameDeaths}</td> */}
 							</tr>
 						</tbody>
 					</Table>

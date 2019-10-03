@@ -6,14 +6,6 @@ export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
       this.state = {
-        games: {
-          lastGame: {
-            character: null,
-            lastGameAssists: null,
-            lastGameDeaths: null,
-            lastGameKills: null,
-          }
-        },
         player: {
           searchName: '',
           userName: this.props.userName,
@@ -51,7 +43,7 @@ export default class Dashboard extends React.Component {
           searchName = {this.state.player.searchName}
         />
         <FormControlCard
-          games={this.state.games}
+          games={this.props.summonerData}
           player={this.state.player}
           formControl='quickRecentStats'
         />
