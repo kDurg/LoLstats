@@ -2,8 +2,8 @@ import React from 'react';
 import { Col, Row, Button, Form, FormGroup, Input, Table } from 'reactstrap';
 
 const FormControlCard = (props) => {
-	
 	switch (props.formControl) {
+		
 		case 'quickRecentStats':
 			return(
 				<>
@@ -38,7 +38,6 @@ const FormControlCard = (props) => {
 							<FormGroup>
 								<Input
 									type={props.type}
-									id={props.id} //This is the username
 									placeholder={props.placeholder}
 									onChange={props.onChange}
 									value={props.searchName}
@@ -48,11 +47,15 @@ const FormControlCard = (props) => {
 					</Col>
 					<Col>
 						<Button 
-							onClick={(summonerName)=>props.onClick(summonerName)}>{props.buttonName}</Button>
+							onClick={props.onClick}>{props.buttonName}</Button>
 					</Col>
 				</Row>
 			);
+
+			default: return;
 	}
+
+
         
 }
 

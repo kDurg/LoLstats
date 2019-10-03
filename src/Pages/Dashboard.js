@@ -27,16 +27,17 @@ export default class Dashboard extends React.Component {
   handleChange(event) {
     let player = {...this.state.player};
     player.searchName = event.target.value;
-    console.log('this is the handleChange event', player);
     this.setState({player});
   }
 
   handleSubmit(event){
     console.log('Searching for: ', this.state.player.searchName);
     event.preventDefault();
+    this.props.inputSummonerName(this.state.player.searchName)
   }
 
   render() {
+
     return(
       <>
         <FormControlCard
@@ -45,7 +46,7 @@ export default class Dashboard extends React.Component {
           id='searchSummonerName'
           type='text'
           placeholder='Summoner Name'
-          onClick={(data)=>this.props.inputSummonerName(data)}
+          onClick={this.handleSubmit}
           onChange={this.handleChange}
           searchName = {this.state.player.searchName}
         />
