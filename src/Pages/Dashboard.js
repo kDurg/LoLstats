@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from "axios";
 
+import { Container, Row, Col } from 'reactstrap';
+
 import FormControlCard from '../Components/FormControlCard'
 
 export default class Dashboard extends React.Component {
@@ -11,6 +13,7 @@ export default class Dashboard extends React.Component {
           searchName: '',
           userName: this.props.state.data.userName,
         },
+        liveStatus: this.props.state.data.matches.liveMatch.liveStatus,
       };
 
       // BIND THIS ACROSS FUNCTIONS
@@ -21,8 +24,9 @@ export default class Dashboard extends React.Component {
   }
 
   getSummonerData(userName) {
+
     const { apiKey, baseURL, corsAnywhere } = this.props.state.apiData;
-    let res = {...this.props.state.data};
+    let responseData = {...this.props.state.data};
     let axiosResponse;
 
     if (userName) {  
@@ -34,7 +38,7 @@ export default class Dashboard extends React.Component {
       axios.get(summonerByNameData).then(response => {
         axiosResponse = response.status;
         if (response.status === 200){
-          res = ({
+          responseData = ({
             accountID: response.data.accountId,
             id: response.data.id,
             lastUpdated: response.data.revisionDate,
@@ -45,17 +49,18 @@ export default class Dashboard extends React.Component {
             summonerLevel: response.data.summonerLevel,
             userName: response.data.name,
           })
-
+          
           // GET LAST 100 MATCHES
-          const getMatchUrl = baseURL + 'lol/match/v4/matchlists/by-account/' + res.accountID + '?api_key='
+          const getMatchUrl = baseURL + 'lol/match/v4/matchlists/by-account/' + responseData.accountID + '?api_key='
           const summonerMatchData = corsAnywhere + getMatchUrl + apiKey;
           axios.get(summonerMatchData).then(response => {
             axiosResponse = response.status;
             if (response.status === 200){
-              res.matches.allMatches = response.data.matches
-              that.props.updateAppState('data', res);
-              that.getMostRecentMatchData(res.matches.allMatches[0].gameId);
+              responseData.matches.allMatches = response.data.matches
+              that.props.updateAppState('data', responseData);
+              that.getMostRecentMatchData(responseData.matches.allMatches[0].gameId);
             }
+            this.props.updateLiveData();
           }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
         }
 
@@ -65,6 +70,7 @@ export default class Dashboard extends React.Component {
   }
 
   getMostRecentMatchData(gameId) {
+
     const { apiKey, baseURL, corsAnywhere } = this.props.state.apiData;
     const getRecentMatchUrl = baseURL + `lol/match/v4/matches/${gameId}?api_key=`;
     const mostRecentMatch = corsAnywhere + getRecentMatchUrl + apiKey;
@@ -104,35 +110,68 @@ export default class Dashboard extends React.Component {
   }
 
   handleChange(event) {
+
     let player = {...this.state.player};
     player.searchName = event.target.value;
     this.setState({player});
   }
 
   handleSubmit(event){
+
     event.preventDefault();
     this.getSummonerData(this.state.player.searchName)
   }
 
   render() {
-
+    // console.log('here is our state in Dashboard Render: ', this.props.state)
     return(
       <>
-        <FormControlCard
-          buttonName='Submit'
-          formControl='inputAndSubmit'
-          id='searchSummonerName'
-          onChange={this.handleChange}
-          onClick={this.handleSubmit}
-          placeholder='Summoner Name'
-          searchName = {this.state.player.searchName}
-          type='text'
-        />
-        <FormControlCard
-          formControl='quickRecentStats'
-          games={this.props.state.data.matches}
-          player={this.state.player}
-        />
+        <div className= 'dashboardContainer'>
+          <Container>
+            <Row>
+              <Col md-5>
+                <FormControlCard
+                  buttonName='Submit'
+                  formControl='inputAndSubmit'
+                  id='searchSummonerName'
+                  onChange={this.handleChange}
+                  onClick={this.handleSubmit}
+                  placeholder='Summoner Name'
+                  searchName = {this.state.player.searchName}
+                  type='text'
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col md-5>
+                <div className= 'liveQuickStats'>
+                  <FormControlCard
+                    formControl= 'quickLiveStats'
+                    liveStatus= {this.state.liveStatus}
+                  /> 
+                </div>
+              </Col>
+              <Col md-5>
+                <div className= 'recentQuickStats'>
+                  <FormControlCard
+                    formControl='quickRecentStats'
+                    games={this.props.state.data.matches}
+                    player={this.state.player}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col md-10>
+                <div className= 'trendsQuickStats'>
+
+                </div>
+              </Col>
+            </Row>
+
+          </Container>
+        </div>
+
       </>
     )
   }

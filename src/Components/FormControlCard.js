@@ -1,8 +1,37 @@
 import React from 'react';
-import { Col, Row, Button, Form, FormGroup, Input, Table } from 'reactstrap';
+import { Container, Col, Row, Button, Form, FormGroup, Input, Table } from 'reactstrap';
 
 const FormControlCard = (props) => {
 	switch (props.formControl) {
+
+		case 'quickLiveStats':
+			console.log('FCC props: ', props)
+			let characterIcon;
+			let liveKDA;
+			let liveItems;
+			let liveSummonerSpells;
+			let liveRunes;
+			let timeInGame;
+			
+			if (props.liveStatus){
+				return(
+					<>
+						<Container>
+							<Row>
+								<Col md-2>
+									<h6>LIVE Game</h6>
+								</Col>
+								<Col md-8></Col>
+								<Col md-2>{timeInGame}</Col>
+							</Row>
+						</Container>
+					</>
+				);
+			} else {
+				return(
+					<h1> NO LIVE GAMES</h1>
+				);
+			}
 		
 		case 'quickRecentStats':
 			let kills;
