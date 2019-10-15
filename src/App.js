@@ -13,7 +13,7 @@ export default class App extends React.Component {
     super(props);  
     this.state = {
       apiData: {
-        apiKey: 'RGAPI-411ade42-6089-49c5-b975-58c406becf9c',
+        apiKey: 'RGAPI-54b2ce64-e250-46db-b2e1-23cd3ef785c8',
         baseURL: 'https://na1.api.riotgames.com/',
         corsAnywhere: 'https://cors-anywhere.herokuapp.com/',
       },
@@ -27,6 +27,7 @@ export default class App extends React.Component {
           allMatches: [],
           liveMatch: {
             liveStatus: false,
+            liveData: [],
           },
           recentMatch: [],
         },
@@ -79,9 +80,9 @@ export default class App extends React.Component {
   }
 
   // IS THERE A LIVE GAME FOR THE CURRENT USER?
-
-  // --------------------------------------------------RESPONSE NOT WORKING? SOMETHING WITH CORS?
+  // BUG?: POSSIBLE ISSUE WHEN SWITCHING BETWEEN A LIVE GAME AND NOT?
   updateLiveData(){
+    // console.log('entered update Live data')
 
     const { apiKey, baseURL, corsAnywhere } = this.state.apiData;
     let axiosResponse;
@@ -94,29 +95,35 @@ export default class App extends React.Component {
 
       // GET LIVE GAME DATA
       axios.get(liveGameData).then(res => {
-        console.log('Response: ', res, " and axiosResponse: ", axiosResponse)
         axiosResponse = res.status;
+        console.log('Response: ', res, " and axiosResponse: ", axiosResponse)
         if (axiosResponse === 200) {
           console.log('Successful Live Game Response! ', res)
           responseData = ({
-            bannedChampions: res.data.bannedChampions,
-            gameId: res.data.gameId,
-            gameLength: res.data.gameLength,
-            gameMode: res.data.gameMode,
-            gameStartTime: res.data.gameStartTime,
-            gameType: res.data.gameType,
             liveStatus: true,
-            participants: res.data.participants,
+            liveData: {
+              bannedChampions: res.data.bannedChampions,
+              gameId: res.data.gameId,
+              gameLength: res.data.gameLength,
+              gameMode: res.data.gameMode,
+              gameStartTime: res.data.gameStartTime,
+              gameType: res.data.gameType,
+              liveStatus: true,
+              participants: res.data.participants,
+            },
           });
           this.updateAppState('liveData', responseData);
-
-        } else {
-          // NOT WORKING, MAYBE REPONSE ISSUE FROM CORSANYWHERE?
-          console.log('No games currently happening for this user')
-          responseData = ({liveStatus: false});
-          this.updateAppState('liveData', responseData);
         }
-      }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
+      }).catch(err => {
+        if (err.response) {
+          console.log('ERROR data: ', err.response.data);
+          if (err.response.data.status.status_code == 404){
+            console.log('No games currently happening for this user')
+            responseData = ({liveStatus: false});
+            this.updateAppState('liveData', responseData);
+          }
+        }
+      });
     }
   }
 

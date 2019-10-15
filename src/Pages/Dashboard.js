@@ -61,7 +61,7 @@ export default class Dashboard extends React.Component {
               that.getMostRecentMatchData(responseData.matches.allMatches[0].gameId);
             }
             this.props.updateLiveData();
-          }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
+          }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err.response.status));
         }
 
       }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
