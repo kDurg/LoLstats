@@ -6,24 +6,44 @@ const FormControlCard = (props) => {
 
 		case 'quickLiveStats':
 			console.log('FCC props: ', props)
-			let characterIcon;
-			let liveKDA;
-			let liveItems;
-			let liveSummonerSpells;
-			let liveRunes;
-			let timeInGame;
+			// let characterIcon;
+			// let liveKDA;
+			// let liveItems;
+			// let liveSummonerSpells;
+			// let liveRunes;
 			
-			if (props.liveStatus){
+			if (props.liveData.liveStatus){
+				let secondsInGame = props.liveData.liveData.gameLength +240;
+				let minutes = Math.floor(secondsInGame / 60);
+				let seconds = secondsInGame - (minutes * 60);
+					if (seconds < 10){ seconds= `0${seconds}`}
+				let actualTimeInGame = `${minutes}:${seconds}`
+
 				return(
 					<>
-						<Container>
-							<Row>
-								<Col md-2>
-									<h6>LIVE Game</h6>
-								</Col>
-								<Col md-8></Col>
-								<Col md-2>{timeInGame}</Col>
-							</Row>
+						<Container style={styles.container}>
+							<Container>
+								<Row>
+									<Col md-2>
+										<h6>LIVE Game</h6>
+									</Col>
+									<Col md-8> data delayed by 4 minutes </Col>
+									<Col md-2>o {actualTimeInGame}</Col>
+								</Row>
+							</Container>
+							<Container>
+								<Row>
+									<Col md-2>
+										<Row>Icon</Row>
+										<Row>Neeko</Row>
+									</Col>
+									<Col md-10>
+										<Row>Kills: | Deaths: | Assists: </Row>
+										<Row>Items: </Row>
+									</Col>
+								</Row>
+								<Row> UPDATED: *NEED UPDATED AT TIME*</Row>
+							</Container>
 						</Container>
 					</>
 				);
@@ -96,5 +116,16 @@ const FormControlCard = (props) => {
 		default: return;
 	}   
 }
+const styles = {
+	container: {
+		background: 'red',
+		borderRadius: 4,
+		borderWidth: 1,
+		borderColor: 'black',
+		marginTop: 5, 
+		padding: 5,
+	}
+}
+
 
 export default FormControlCard;

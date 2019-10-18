@@ -156,7 +156,8 @@ export default class Dashboard extends React.Component {
                 <div className= 'liveQuickStats'>
                   <FormControlCard
                     formControl= 'quickLiveStats'
-                    liveStatus= {this.props.state.data.matches.liveMatch.liveStatus}
+                    liveData= {this.props.state.data.matches.liveMatch}
+                    // liveStatus= {this.props.state.data.matches.liveMatch.liveStatus}
                   /> 
                 </div>
               </Col>
