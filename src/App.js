@@ -108,7 +108,6 @@ export default class App extends React.Component {
               gameMode: res.data.gameMode,
               gameStartTime: res.data.gameStartTime,
               gameType: res.data.gameType,
-              liveStatus: true,
               participants: res.data.participants,
             },
           });
