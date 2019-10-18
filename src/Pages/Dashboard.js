@@ -13,7 +13,6 @@ export default class Dashboard extends React.Component {
           searchName: '',
           userName: this.props.state.data.userName,
         },
-        liveStatus: this.props.state.data.matches.liveMatch.liveStatus,
       };
 
       // BIND THIS ACROSS FUNCTIONS
@@ -44,6 +43,10 @@ export default class Dashboard extends React.Component {
             lastUpdated: response.data.revisionDate,
             matches: {
               allMatches: [],
+              liveMatch: {
+                liveData: this.props.state.data.matches.liveMatch.liveData,
+                liveStatus: this.props.state.data.matches.liveMatch.liveStatus
+              }
             },
             profileIconId: response.data.profileIconId,
             summonerLevel: response.data.summonerLevel,
@@ -61,7 +64,9 @@ export default class Dashboard extends React.Component {
               that.getMostRecentMatchData(responseData.matches.allMatches[0].gameId);
             }
             this.props.updateLiveData();
-          }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err.response.status));
+          // }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err.response.status));
+        }).catch(err => console.log(err));
+
         }
 
       }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
@@ -84,7 +89,11 @@ export default class Dashboard extends React.Component {
         if (response.status === 200){
           recentMatchPlayerStats=({
             allMatches: this.props.state.data.matches.allMatches,
-            recentMatch: []
+            liveMatch: {
+              liveData: this.props.state.data.matches.liveMatch.liveData,
+              liveStatus: this.props.state.data.matches.liveMatch.liveStatus
+            },
+            recentMatch: [],
           });
   
           // LOOP THROUGH PLAYERS TO FIND OUR SEARCHED PLAYER AND RETURN PARTICIPANT-ID
@@ -123,7 +132,7 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
-    // console.log('here is our state in Dashboard Render: ', this.props.state)
+    console.log('here is our state in Dashboard Render: ', this.state, this.props.state)
     return(
       <>
         <div className= 'dashboardContainer'>
@@ -147,7 +156,7 @@ export default class Dashboard extends React.Component {
                 <div className= 'liveQuickStats'>
                   <FormControlCard
                     formControl= 'quickLiveStats'
-                    liveStatus= {this.state.liveStatus}
+                    liveStatus= {this.props.state.data.matches.liveMatch.liveStatus}
                   /> 
                 </div>
               </Col>
