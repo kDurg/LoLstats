@@ -1,11 +1,13 @@
 import React from 'react';
-import { Container, Col, Row, Button, Form, FormGroup, Input, Table } from 'reactstrap';
+import { Col, Row, Button, Form, FormGroup, Input, Table } from 'reactstrap';
+
+import { Card, Container } from '@material-ui/core';
 
 const FormControlCard = (props) => {
 	switch (props.formControl) {
 
 		case 'quickLiveStats':
-			console.log('FCC props: ', props)
+			// console.log('FCC props: ', props)
 			// let characterIcon;
 			// let liveKDA;
 			// let liveItems;
@@ -58,6 +60,7 @@ const FormControlCard = (props) => {
 			let deaths;
 			let assists;
 			let kda;
+			
 			if (props.games.recentMatch){
 
 				kills = props.games.recentMatch.kills;
@@ -73,24 +76,27 @@ const FormControlCard = (props) => {
 					<>
 						<h1>Most Recent Game</h1>
 						<h6>Character: </h6>
-						<Table dark>
-							<thead>
-								<tr>
-									<th>Kills</th>
-									<th>Deaths</th>
-									<th>Assists</th>
-									<th>KDA</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>{kills}</td>
-									<td>{deaths}</td>
-									<td>{assists}</td>
-									<td>{kda}</td>
-								</tr>
-							</tbody>
-						</Table>
+						<Card>
+							
+							<Table dark>
+								<thead>
+									<tr>
+										<th>Kills</th>
+										<th>Deaths</th>
+										<th>Assists</th>
+										<th>KDA</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>{kills}</td>
+										<td>{deaths}</td>
+										<td>{assists}</td>
+										<td>{kda}</td>
+									</tr>
+								</tbody>
+							</Table>
+						</Card>
 					</>
 				);
 			}

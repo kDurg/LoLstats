@@ -13,7 +13,7 @@ export default class App extends React.Component {
     super(props);  
     this.state = {
       apiData: {
-        apiKey: 'RGAPI-db865e79-badb-4712-9f7e-feec35f30991',
+        apiKey: 'RGAPI-11c583a9-9859-4cc4-9770-461f463bd64e',
         baseURL: 'https://na1.api.riotgames.com/',
         corsAnywhere: 'https://cors-anywhere.herokuapp.com/',
       },
@@ -21,6 +21,7 @@ export default class App extends React.Component {
       currentPageHeaderImage: HomeImage,
       data: {
         accountID: null,
+        characterData: [],
         id: null,
         lastUpdated: null,
         matches: {
@@ -44,6 +45,7 @@ export default class App extends React.Component {
   componentDidMount() {
 
     // console.log('component did mount state: ', this.state);
+    this.updateCharacterJSON();
   }
 
   componentDidUpdate() {
@@ -72,6 +74,7 @@ export default class App extends React.Component {
 
       case 'recentMatch':
         data.matches = updatedData;
+        console.log('Data in state recent match', this.state)
         this.setState({data})
       break;
 
@@ -124,6 +127,16 @@ export default class App extends React.Component {
         }
       });
     }
+  }
+
+  updateCharacterJSON() {
+    let responseData = {...this.state.data};
+    const characterJsonUrl = 'http://ddragon.leagueoflegends.com/cdn/9.20.1/data/en_US/champion.json';
+
+    axios.get(characterJsonUrl).then(res => {
+      responseData.characterData= res.data.data;
+      this.updateAppState('data', responseData);
+    })
   }
 
   render() {

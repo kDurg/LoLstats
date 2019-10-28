@@ -39,6 +39,7 @@ export default class Dashboard extends React.Component {
         if (response.status === 200){
           responseData = ({
             accountID: response.data.accountId,
+            characterData: this.props.state.data.characterData,
             id: response.data.id,
             lastUpdated: response.data.revisionDate,
             matches: {
@@ -63,7 +64,7 @@ export default class Dashboard extends React.Component {
               that.props.updateAppState('data', responseData);
               that.getMostRecentMatchData(responseData.matches.allMatches[0].gameId);
             }
-            this.props.updateLiveData();
+            // this.props.updateLiveData();
           // }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err.response.status));
         }).catch(err => console.log(err));
 
@@ -73,6 +74,27 @@ export default class Dashboard extends React.Component {
 
       }
   }
+
+  getMostRecentCharacterData(){
+    
+    let championID = this.props.state.data.matches.allMatches[0].champion;
+    let championArray = {...this.props.state.data.characterData};
+    
+    if (championID){
+      let recentChampData;
+      Object.values(championArray).forEach(character => {
+        if (parseInt(character.key) === championID){
+          recentChampData = ({
+            name: character.name,
+            tags: character.tags,
+            image: character.image
+          });
+          console.log('recentChampData', recentChampData)
+          return recentChampData;
+        } 
+      })
+    }
+}
 
   getMostRecentMatchData(gameId) {
 
@@ -109,8 +131,16 @@ export default class Dashboard extends React.Component {
               recentMatchPlayerStats.recentMatch = participant.stats
             }
           })
-  
+
           this.props.updateAppState('recentMatch', recentMatchPlayerStats)
+          
+          // GET CHARACTER DATA FOR QUICK STATS
+          // if (this.state.data.characterData && this.state.data.recentMatch){
+            let mostRecentCharacterData = this.getMostRecentCharacterData()
+            // if (mostRecentCharacterData !== false) {
+              console.log('mostRecentCharacterData', mostRecentCharacterData)
+            // } else {console.log('mostRecentCharacterData NOT FOUND')}
+          // }
         }
         
       }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
@@ -132,7 +162,7 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
-    console.log('here is our state in Dashboard Render: ', this.state, this.props.state)
+    // console.log('here is our state in Dashboard Render: ', this.state, this.props.state)
     return(
       <>
         <div className= 'dashboardContainer'>
