@@ -1,10 +1,50 @@
 import React from 'react';
-import { Col, Row, Button, Form, FormGroup, Input, Table } from 'reactstrap';
+import { makeStyles } from '@material-ui/core/styles';
+import { Col, Row, Button, Input, Table } from 'reactstrap';
 
-import { Card, Container } from '@material-ui/core';
+import { Card, CardActionArea, CardContent, CardMedia, Container, Typography } from '@material-ui/core';
 
 const FormControlCard = (props) => {
 	switch (props.formControl) {
+
+		case 'characterTile':
+			const useStyles = makeStyles({
+				card: {
+					maxWidth: 345,
+				},
+				media: {
+					height: 140,
+				},
+			});
+
+			let imagePath;
+			if (props.image.image) {
+				imagePath = `http://ddragon.leagueoflegends.com/cdn/9.21.1/img/champion/${props.image.image.full}`;
+			}
+			const classes = useStyles();
+
+				return (
+					<Card className={classes.card}>
+						<CardActionArea>
+							<CardMedia
+								className={classes.media}
+								image={imagePath}
+								title={props.recentMatch.characterDetails.name}
+							/>
+							<CardContent>
+								<Typography gutterBottom variant="h5" component="h2">
+								{props.recentMatch.characterDetails.name}
+								</Typography>
+								<Typography variant="body2" color="textSecondary" component="p">
+								Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+								across all continents except Antarctica
+								</Typography>
+							</CardContent>
+						</CardActionArea>
+					</Card>
+				)
+			// } else { return null }
+		break;
 
 		case 'quickLiveStats':
 			// console.log('FCC props: ', props)
@@ -54,6 +94,7 @@ const FormControlCard = (props) => {
 					<h1> NO LIVE GAMES</h1>
 				);
 			}
+			break;
 		
 		case 'quickRecentStats':
 			let kills;
@@ -61,11 +102,11 @@ const FormControlCard = (props) => {
 			let assists;
 			let kda;
 			
-			if (props.games.recentMatch){
+			if (props.recentMatch){
 
-				kills = props.games.recentMatch.kills;
-				deaths = props.games.recentMatch.deaths;
-				assists = props.games.recentMatch.assists;
+				kills = props.recentMatch.gameStats.kills;
+				deaths = props.recentMatch.gameStats.deaths;
+				assists = props.recentMatch.gameStats.assists;
 				if (isNaN((kills/deaths))) {
 					kda = ''
 				} else {
@@ -100,6 +141,7 @@ const FormControlCard = (props) => {
 					</>
 				);
 			}
+			break;
 
 		case 'inputAndSubmit':
 			return (
@@ -118,6 +160,7 @@ const FormControlCard = (props) => {
 					</Col>
 				</Row>
 			);
+			break;
 
 		default: return;
 	}   

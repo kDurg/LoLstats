@@ -30,7 +30,10 @@ export default class App extends React.Component {
             liveStatus: false,
             liveData: [],
           },
-          recentMatch: [],
+          recentMatch: {
+            characterDetails: [],
+            gameStats: [],
+          },
         },
         profileIconId: null,
         summonerLevel: null, 
@@ -119,7 +122,7 @@ export default class App extends React.Component {
       }).catch(err => {
         if (err.response) {
           console.log('ERROR data: ', err.response.data);
-          if (err.response.data.status.status_code == 404){
+          if (err.response.data.status.status_code === 404){
             console.log('No games currently happening for this user')
             responseData = ({liveStatus: false});
             this.updateAppState('liveData', responseData);

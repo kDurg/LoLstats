@@ -47,12 +47,17 @@ export default class Dashboard extends React.Component {
               liveMatch: {
                 liveData: this.props.state.data.matches.liveMatch.liveData,
                 liveStatus: this.props.state.data.matches.liveMatch.liveStatus
-              }
+              },
+              recentMatch: {
+                characterDetails: [],
+                gameStats: [],
+              },
             },
             profileIconId: response.data.profileIconId,
             summonerLevel: response.data.summonerLevel,
             userName: response.data.name,
           })
+          
           
           // GET LAST 100 MATCHES
           const getMatchUrl = baseURL + 'lol/match/v4/matchlists/by-account/' + responseData.accountID + '?api_key='
@@ -89,10 +94,9 @@ export default class Dashboard extends React.Component {
             tags: character.tags,
             image: character.image
           });
-          console.log('recentChampData', recentChampData)
-          return recentChampData;
         } 
       })
+      return recentChampData;
     }
 }
 
@@ -128,19 +132,17 @@ export default class Dashboard extends React.Component {
           // USE PARTICIPANT-ID TO GET STATS
           response.data.participants.forEach(participant => {
             if (participant.participantId === participantId) {
-              recentMatchPlayerStats.recentMatch = participant.stats
+              recentMatchPlayerStats.recentMatch.gameStats = participant.stats
             }
-          })
-
-          this.props.updateAppState('recentMatch', recentMatchPlayerStats)
+          });
           
           // GET CHARACTER DATA FOR QUICK STATS
-          // if (this.state.data.characterData && this.state.data.recentMatch){
-            let mostRecentCharacterData = this.getMostRecentCharacterData()
-            // if (mostRecentCharacterData !== false) {
-              console.log('mostRecentCharacterData', mostRecentCharacterData)
-            // } else {console.log('mostRecentCharacterData NOT FOUND')}
-          // }
+          let mostRecentCharacterData = this.getMostRecentCharacterData()
+          if (mostRecentCharacterData) {
+            recentMatchPlayerStats.recentMatch.characterDetails = mostRecentCharacterData
+          };
+
+          this.props.updateAppState('recentMatch', recentMatchPlayerStats);
         }
         
       }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
@@ -158,7 +160,7 @@ export default class Dashboard extends React.Component {
   handleSubmit(event){
 
     event.preventDefault();
-    this.getSummonerData(this.state.player.searchName)
+    this.getSummonerData(this.state.player.searchName);
   }
 
   render() {
@@ -191,15 +193,24 @@ export default class Dashboard extends React.Component {
                   /> 
                 </div>
               </Col>
-              <Col md-5>
+              <Row>
                 <div className= 'recentQuickStats'>
-                  <FormControlCard
-                    formControl='quickRecentStats'
-                    games={this.props.state.data.matches}
-                    player={this.state.player}
-                  />
-                </div>
-              </Col>
+                  <Col md-5>
+                    <FormControlCard
+                      image={this.props.state.data.matches.recentMatch.characterDetails ? this.props.state.data.matches.recentMatch.characterDetails : null }
+                      formControl='characterTile'
+                      recentMatch={this.props.state.data.matches.recentMatch}
+                    />
+                  </Col>
+                  <Col md-5>
+                    <FormControlCard
+                      formControl='quickRecentStats'
+                      player={this.state.player}
+                      recentMatch={this.props.state.data.matches.recentMatch}
+                    />
+                  </Col>
+                  </div>
+              </Row>
             </Row>
             <Row>
               <Col md-10>
