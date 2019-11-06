@@ -13,6 +13,7 @@ export default class Dashboard extends React.Component {
           searchName: '',
           userName: this.props.state.data.userName,
         },
+        renderedCards: false
       };
 
       // BIND THIS ACROSS FUNCTIONS
@@ -58,7 +59,7 @@ export default class Dashboard extends React.Component {
             userName: response.data.name,
           })
           
-          
+          console.log('Summoner Data', responseData)
           // GET LAST 100 MATCHES
           const getMatchUrl = baseURL + 'lol/match/v4/matchlists/by-account/' + responseData.accountID + '?api_key='
           const summonerMatchData = corsAnywhere + getMatchUrl + apiKey;
@@ -72,6 +73,7 @@ export default class Dashboard extends React.Component {
             // this.props.updateLiveData();
           // }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err.response.status));
         }).catch(err => console.log(err));
+        console.log('100 games Summoner Data', responseData)
 
         }
 
@@ -163,6 +165,66 @@ export default class Dashboard extends React.Component {
     this.getSummonerData(this.state.player.searchName);
   }
 
+  showCurrentLiveGameCard(){
+    if (this.props.state.data.matches.liveMatch.liveStatus){
+      return (
+        <>
+          <Col md-5>
+            <div className= 'liveQuickStats'>
+              <FormControlCard
+                formControl= 'quickLiveStats'
+                liveData= {this.props.state.data.matches.liveMatch}
+                // liveStatus= {this.props.state.data.matches.liveMatch.liveStatus}
+              /> 
+            </div>
+          </Col>
+        </>
+      )
+    }
+  }
+
+  showRecentGameCard(){
+
+    // if (this.props.state.data.userName !== null && this.props.state.data.userName !== '') {
+      return (
+        <>
+          <Row>
+            {this.showCurrentLiveGameCard}
+              <Container>
+            <Row>
+              <div className= 'recentQuickStats'>
+                <Col>
+                  <FormControlCard
+                    formControl='characterTile'
+                    image={this.props.state.data.matches.recentMatch.characterDetails ? this.props.state.data.matches.recentMatch.characterDetails : null }
+                    recentMatch={this.props.state.data.matches.recentMatch}
+                  />
+                </Col>
+
+                <Col>
+                  <FormControlCard
+                    formControl='recentTeamStats'
+                    player={this.state.player}
+                    recentMatch={this.props.state.data.matches.recentMatch}
+                  />
+                </Col>
+              </div>
+            </Row>
+              </Container>
+          </Row>
+          
+          <Row>
+            <Col md-10>
+              <div className= 'trendsQuickStats'>
+
+              </div>
+            </Col>
+          </Row>
+        </>
+      )
+    // }
+  }
+
   render() {
     // console.log('here is our state in Dashboard Render: ', this.state, this.props.state)
     return(
@@ -183,43 +245,7 @@ export default class Dashboard extends React.Component {
                 />
               </Col>
             </Row>
-            <Row>
-              <Col md-5>
-                <div className= 'liveQuickStats'>
-                  <FormControlCard
-                    formControl= 'quickLiveStats'
-                    liveData= {this.props.state.data.matches.liveMatch}
-                    // liveStatus= {this.props.state.data.matches.liveMatch.liveStatus}
-                  /> 
-                </div>
-              </Col>
-              <Row>
-                <div className= 'recentQuickStats'>
-                  <Col md-5>
-                    <FormControlCard
-                      image={this.props.state.data.matches.recentMatch.characterDetails ? this.props.state.data.matches.recentMatch.characterDetails : null }
-                      formControl='characterTile'
-                      recentMatch={this.props.state.data.matches.recentMatch}
-                    />
-                  </Col>
-                  <Col md-5>
-                    <FormControlCard
-                      formControl='quickRecentStats'
-                      player={this.state.player}
-                      recentMatch={this.props.state.data.matches.recentMatch}
-                    />
-                  </Col>
-                  </div>
-              </Row>
-            </Row>
-            <Row>
-              <Col md-10>
-                <div className= 'trendsQuickStats'>
-
-                </div>
-              </Col>
-            </Row>
-
+            {this.showRecentGameCard()}
           </Container>
         </div>
 

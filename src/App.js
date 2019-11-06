@@ -13,7 +13,7 @@ export default class App extends React.Component {
     super(props);  
     this.state = {
       apiData: {
-        apiKey: 'RGAPI-11c583a9-9859-4cc4-9770-461f463bd64e',
+        apiKey: 'RGAPI-6b907524-9b58-4867-8dbb-50ee05704760',
         baseURL: 'https://na1.api.riotgames.com/',
         corsAnywhere: 'https://cors-anywhere.herokuapp.com/',
       },
@@ -149,7 +149,7 @@ export default class App extends React.Component {
         <header className="App-header"></header>
         <>
           <NavBar
-            userName= {this.state.userName}
+            userName={this.state.data.userName}
           />
           <HeaderJumbotron
             imgSrc={this.state.currentPageHeaderImage}

@@ -4,7 +4,7 @@
 } */
 
 .App {
-  width: 95vw;
+  width: 98vw;
 }
 
 .App-header {
@@ -48,11 +48,12 @@
 }
 
 #jumboimage {
-  width: 100%;
-  height: auto;
-  background-size: cover;
+  max-width: 100%;
+  max-height: 30vh;
+  background-size: auto;
   background-position: center;
   margin: 0;
+  overflow: hidden;
   padding: 0px;
 }
 

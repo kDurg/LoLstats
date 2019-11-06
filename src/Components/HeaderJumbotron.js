@@ -16,7 +16,7 @@ const HeaderJumbotron = (props) => {
             src={props.imgSrc}
             alt={props.alt}
           />
-          <div id = "headerJumbotronText">{headlineText}</div>
+          {/* <div id = "headerJumbotronText">{headlineText}</div> */}
         </Container>
       </Jumbotron>
     </div>

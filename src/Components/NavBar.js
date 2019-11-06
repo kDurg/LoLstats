@@ -19,43 +19,53 @@ export default class NavBar extends React.Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
-      currentUser: props.userName
     };
   }
+
+  
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
+  
   render() {
+
+      let userName = ''
+      if (this.props.userName !== null && this.props.userName !==undefined){
+        userName = this.props.userName;
+      }
+
     return (
       <div>
         <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">Stats: {this.state.currentUser}</NavbarBrand>
+          <NavbarBrand href="/">Stats: {userName}</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem>
+              {/* <NavItem>
                 <NavLink href="/components/">Components</NavLink>
-              </NavItem>
+              </NavItem> */}
               <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+                <NavLink href="https://developer.riotgames.com/">Riot API</NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                  Options
+                  Links
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    Option 1
+                    <NavLink href="http://www.kyledurigan.com/">Portfolio</NavLink>
                   </DropdownItem>
                   <DropdownItem>
-                    Option 2
+                    <NavLink href="https://github.com/kDurg/LoLstats">GitHub</NavLink>
+                  </DropdownItem>
+                  {/* <DropdownItem>
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem>
                     Reset
-                  </DropdownItem>
+                  </DropdownItem> */}
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
