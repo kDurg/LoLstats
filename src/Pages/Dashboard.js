@@ -1,43 +1,44 @@
 import React from 'react';
 import axios from "axios";
 
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Table, Card } from 'reactstrap';
 
 import FormControlCard from '../Components/FormControlCard'
 
 export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-      this.state = {
-        player: {
-          searchName: '',
-          userName: this.props.state.data.userName,
-        },
-        renderedCards: false
-      };
+    this.state = {
+      player: {
+        searchName: '',
+        userName: this.props.state.data.userName,
+      },
+      recentGameRequestFinished: false,
+      renderedCards: false
+    };
 
-      // BIND THIS ACROSS FUNCTIONS
-      this.getSummonerData = this.getSummonerData.bind(this);
-      this.getMostRecentMatchData = this.getMostRecentMatchData.bind(this);
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+    // BIND THIS ACROSS FUNCTIONS
+    this.getSummonerData = this.getSummonerData.bind(this);
+    this.getMostRecentMatchData = this.getMostRecentMatchData.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   getSummonerData(userName) {
 
     const { apiKey, baseURL, corsAnywhere } = this.props.state.apiData;
-    let responseData = {...this.props.state.data};
+    let responseData = { ...this.props.state.data };
     let axiosResponse;
 
-    if (userName) {  
+    if (userName) {
       const that = this
       const getSummonerUrl = baseURL + 'lol/summoner/v4/summoners/by-name/' + userName + '?api_key='
       const summonerByNameData = corsAnywhere + getSummonerUrl + apiKey;
-  
+
       // GET SUMMONER ID AND DATA
       axios.get(summonerByNameData).then(response => {
         axiosResponse = response.status;
-        if (response.status === 200){
+        if (response.status === 200) {
           responseData = ({
             accountID: response.data.accountId,
             characterData: this.props.state.data.characterData,
@@ -58,50 +59,50 @@ export default class Dashboard extends React.Component {
             summonerLevel: response.data.summonerLevel,
             userName: response.data.name,
           })
-          
+
           console.log('Summoner Data', responseData)
           // GET LAST 100 MATCHES
           const getMatchUrl = baseURL + 'lol/match/v4/matchlists/by-account/' + responseData.accountID + '?api_key='
           const summonerMatchData = corsAnywhere + getMatchUrl + apiKey;
           axios.get(summonerMatchData).then(response => {
             axiosResponse = response.status;
-            if (response.status === 200){
+            if (response.status === 200) {
               responseData.matches.allMatches = response.data.matches
               that.props.updateAppState('data', responseData);
               that.getMostRecentMatchData(responseData.matches.allMatches[0].gameId);
             }
             // this.props.updateLiveData();
-          // }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err.response.status));
-        }).catch(err => console.log(err));
-        console.log('100 games Summoner Data', responseData)
-
+            // }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err.response.status));
+          }).catch(err => console.log(err));
+          console.log('100 games Summoner Data', responseData)
         }
 
       }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
 
-      }
+    }
   }
 
-  getMostRecentCharacterData(){
-    
-    let championID = this.props.state.data.matches.allMatches[0].champion;
-    let championArray = {...this.props.state.data.characterData};
-    
-    if (championID){
+  // GET DATA FOR THE CHAMPION USED IN THE MOST RECENT GAME
+  getMostRecentCharacterData(championID) {
+
+    const championArray = { ...this.props.state.data.characterData };
+
+    if (championID) {
       let recentChampData;
       Object.values(championArray).forEach(character => {
-        if (parseInt(character.key) === championID){
+        if (parseInt(character.key) === championID) {
           recentChampData = ({
             name: character.name,
             tags: character.tags,
             image: character.image
           });
-        } 
+        }
       })
       return recentChampData;
     }
-}
+  }
 
+  // GET RECENT GAME STATS FOR SEARCHED PLAYER
   getMostRecentMatchData(gameId) {
 
     const { apiKey, baseURL, corsAnywhere } = this.props.state.apiData;
@@ -109,13 +110,13 @@ export default class Dashboard extends React.Component {
     const mostRecentMatch = corsAnywhere + getRecentMatchUrl + apiKey;
     let axiosResponse;
     let participantId;
-    let recentMatchPlayerStats = {...this.props.state.data.matches};
+    let recentMatchPlayerStats = { ...this.props.state.data.matches };
 
-    if (gameId){
+    if (gameId) {
       axios.get(mostRecentMatch).then(response => {
         axiosResponse = response.status;
-        if (response.status === 200){
-          recentMatchPlayerStats=({
+        if (response.status === 200) {
+          recentMatchPlayerStats = ({
             allMatches: this.props.state.data.matches.allMatches,
             liveMatch: {
               liveData: this.props.state.data.matches.liveMatch.liveData,
@@ -123,30 +124,68 @@ export default class Dashboard extends React.Component {
             },
             recentMatch: [],
           });
-  
+
           // LOOP THROUGH PLAYERS TO FIND OUR SEARCHED PLAYER AND RETURN PARTICIPANT-ID
           response.data.participantIdentities.forEach(player => {
             if (player.player.accountId === this.props.state.data.accountID) {
               participantId = player.participantId;
             }
           });
-  
+
           // USE PARTICIPANT-ID TO GET STATS
           response.data.participants.forEach(participant => {
             if (participant.participantId === participantId) {
               recentMatchPlayerStats.recentMatch.gameStats = participant.stats
             }
           });
-          
-          // GET CHARACTER DATA FOR QUICK STATS
-          let mostRecentCharacterData = this.getMostRecentCharacterData()
+
+          // GET PLAYER CHARACTER DATA FOR QUICK STATS
+          let mostRecentCharacterData = this.getMostRecentCharacterData(recentMatchPlayerStats.allMatches[0].champion)
           if (mostRecentCharacterData) {
             recentMatchPlayerStats.recentMatch.characterDetails = mostRecentCharacterData
           };
 
-          this.props.updateAppState('recentMatch', recentMatchPlayerStats);
+          // GET ALL PLAYER CHARACTER DATA FOR QUICK STATS
+          let allPlayerCharacterData = [];
+          let blueTeam = [];
+          let redTeam = [];
+
+          response.data.participantIdentities.forEach(player => {
+            // Find Participant ID and Summoner Name
+            let participantId = player.participantId;
+            let summonerName = player.player.summonerName;
+            let playerData, stats, team;
+
+            // Find Participant Stats
+            response.data.participants.forEach(gameData => {
+              if (participantId === gameData.participantId) {
+                stats = gameData.stats;
+                team = gameData.teamId
+              }
+              
+            })
+            
+            playerData = {
+              participantId,
+              stats,
+              summonerName,
+              team
+            }
+
+            if(playerData.team === 100){
+              blueTeam.push(playerData);
+            } else if (playerData.team === 200){
+              redTeam.push(playerData)
+            }
+
+            allPlayerCharacterData.push(blueTeam, redTeam);
+          });
+console.log(allPlayerCharacterData)
+          // recentMatchPlayerStats.recentMatch.allPlayerCharacterData = allPlayerCharacterData;
+          // this.props.updateAppState('recentMatch', recentMatchPlayerStats);
+          // this.setState({recentGameRequestFinished:true})
         }
-        
+
       }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
 
     }
@@ -154,28 +193,28 @@ export default class Dashboard extends React.Component {
 
   handleChange(event) {
 
-    let player = {...this.state.player};
+    let player = { ...this.state.player };
     player.searchName = event.target.value;
-    this.setState({player});
+    this.setState({ player });
   }
 
-  handleSubmit(event){
+  handleSubmit(event) {
 
     event.preventDefault();
     this.getSummonerData(this.state.player.searchName);
   }
 
-  showCurrentLiveGameCard(){
-    if (this.props.state.data.matches.liveMatch.liveStatus){
+  showCurrentLiveGameCard() {
+    if (this.props.state.data.matches.liveMatch.liveStatus) {
       return (
         <>
           <Col md-5>
-            <div className= 'liveQuickStats'>
+            <div className='liveQuickStats'>
               <FormControlCard
-                formControl= 'quickLiveStats'
-                liveData= {this.props.state.data.matches.liveMatch}
-                // liveStatus= {this.props.state.data.matches.liveMatch.liveStatus}
-              /> 
+                formControl='quickLiveStats'
+                liveData={this.props.state.data.matches.liveMatch}
+              // liveStatus= {this.props.state.data.matches.liveMatch.liveStatus}
+              />
             </div>
           </Col>
         </>
@@ -183,53 +222,59 @@ export default class Dashboard extends React.Component {
     }
   }
 
-  showRecentGameCard(){
+  showRecentGameCard() {
 
-    // if (this.props.state.data.userName !== null && this.props.state.data.userName !== '') {
+    let matches = this.props.state.data.matches;
       return (
         <>
-          <Row>
-            {this.showCurrentLiveGameCard}
-              <Container>
+          <div className='recentQuickStats'>
             <Row>
-              <div className= 'recentQuickStats'>
-                <Col>
-                  <FormControlCard
-                    formControl='characterTile'
-                    image={this.props.state.data.matches.recentMatch.characterDetails ? this.props.state.data.matches.recentMatch.characterDetails : null }
-                    recentMatch={this.props.state.data.matches.recentMatch}
-                  />
-                </Col>
+              {this.showCurrentLiveGameCard}
+              <Container>
+                <Row>
+                  <Col>
+                    <FormControlCard
+                      formControl='characterTile'
+                      image={matches.recentMatch.characterDetails ? matches.recentMatch.characterDetails : null}
+                      recentMatch={matches.recentMatch}
+                    />
+                  </Col>
 
-                <Col>
-                  <FormControlCard
-                    formControl='recentTeamStats'
-                    player={this.state.player}
-                    recentMatch={this.props.state.data.matches.recentMatch}
-                  />
-                </Col>
-              </div>
-            </Row>
+                  <Container>
+                    <Row>
+                      <Col>
+                        <FormControlCard
+                          formControl='tableStats'
+                          recentMatchPlayersData={matches.recentMatch}
+                          team='Red Team'
+                        />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <FormControlCard
+                          formControl='tableStats'
+                          recentMatchPlayersData={matches.recentMatch}
+                          team='Blue Team'
+                        />
+                      </Col>
+                    </Row>
+                  </Container>
+
+
+                </Row>
               </Container>
-          </Row>
-          
-          <Row>
-            <Col md-10>
-              <div className= 'trendsQuickStats'>
-
-              </div>
-            </Col>
-          </Row>
+            </Row>
+          </div>
         </>
       )
-    // }
   }
 
   render() {
     // console.log('here is our state in Dashboard Render: ', this.state, this.props.state)
-    return(
+    return (
       <>
-        <div className= 'dashboardContainer'>
+        <div className='dashboardContainer'>
           <Container>
             <Row>
               <Col md-5>
@@ -240,17 +285,17 @@ export default class Dashboard extends React.Component {
                   onChange={this.handleChange}
                   onClick={this.handleSubmit}
                   placeholder='Summoner Name'
-                  searchName = {this.state.player.searchName}
+                  searchName={this.state.player.searchName}
                   type='text'
                 />
               </Col>
             </Row>
-            {this.showRecentGameCard()}
+            {this.state.recentGameRequestFinished ? this.showRecentGameCard(): null}
           </Container>
         </div>
 
       </>
     )
   }
-  
+
 }
