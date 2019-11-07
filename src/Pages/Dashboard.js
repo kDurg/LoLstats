@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from "axios";
 
-import { Container, Row, Col} from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 import FormControlCard from '../Components/FormControlCard'
 
@@ -60,7 +60,7 @@ export default class Dashboard extends React.Component {
             userName: response.data.name,
           })
 
-          console.log('Summoner Data', responseData)
+          // console.log('Summoner Data', responseData)
           // GET LAST 100 MATCHES
           const getMatchUrl = baseURL + 'lol/match/v4/matchlists/by-account/' + responseData.accountID + '?api_key='
           const summonerMatchData = corsAnywhere + getMatchUrl + apiKey;
@@ -73,7 +73,7 @@ export default class Dashboard extends React.Component {
             }
             // this.props.updateLiveData();
           }).catch(err => console.log(err));
-          console.log('100 games Summoner Data', responseData)
+          // console.log('100 games Summoner Data', responseData)
         }
 
       }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
@@ -227,28 +227,22 @@ export default class Dashboard extends React.Component {
     let characterDetails = [];
     let characterName = matches.recentMatch.characterDetails.name;
 
-    // characterData.forEach(character =>{
-    //   if (characterName === characterData.name){
-    //     characterDetails.push(character);
-    //     return;
-    //   }
-    // });
-
     Object.values(characterData).forEach(character => {
       if (character.name === characterName) {
         characterDetails.push(character);
         return;
       }
     })
-    
+
     return (
       <>
         <div className='recentQuickStats'>
+          <Row> <h4>RECENT GAME</h4></Row>
           <Row>
             {this.showCurrentLiveGameCard}
-            <Container>
+            <Container className='closeColumns'>
               <Row>
-                <Col>
+                <Col md='6' className='closeColumns'>
                   <FormControlCard
                     characterDetails={characterDetails[0]}
                     formControl='characterTile'
@@ -257,27 +251,30 @@ export default class Dashboard extends React.Component {
                   />
                 </Col>
 
-                <Container>
-                  <Row>
-                    <Col>
-                      <FormControlCard
-                        formControl='tableStats'
-                        recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.blueTeam}
-                        team='Blue'
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <FormControlCard
-                        formControl='tableStats'
-                        recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.redTeam}
-                        team='Red'
-                      />
-                    </Col>
-                  </Row>
-                </Container>
-
+                <Col md='6' className='closeColumns'>
+                  <Container className='closeColumns'>
+                    <Row>
+                      <Col className='closeColumns'>
+                        <FormControlCard
+                          formControl='tableStats'
+                          recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.blueTeam}
+                          team='Blue'
+                          teamColor='rgba(49,77,138)'
+                        />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col className='closeColumns'>
+                        <FormControlCard
+                          formControl='tableStats'
+                          recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.redTeam}
+                          team='Red'
+                          teamColor='rgba(227,11,93)'
+                        />
+                      </Col>
+                    </Row>
+                  </Container>
+                </Col>
 
               </Row>
             </Container>

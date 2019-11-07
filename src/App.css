@@ -59,12 +59,22 @@
   margin: auto;
 }
 
-#headerJumbotronText {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: blueviolet;
-  font-size: calc(10px + 2vmin);
+.recentQuickStats{
+  margin: 1px;
+  padding: 1px;
+}
 
+.closeColumns, .closeContainers{
+  background:rgba(236, 235, 235, 0.966);
+  padding: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+div.closeColumns.col{
+  padding:0px
+}
+
+div.closeColumns.col-md-6{
+  padding: 2px;
 }

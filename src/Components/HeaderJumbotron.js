@@ -2,10 +2,6 @@ import React from 'react';
 import { Jumbotron, Container } from 'reactstrap';
 
 const HeaderJumbotron = (props) => {
-  let headlineText;
-  if (props.userName !== null && props.userName !==undefined){
-    headlineText = `Welcome ${props.userName}`;
-  }
   
   return (
     <div className="headerJumbotron">
@@ -16,7 +12,6 @@ const HeaderJumbotron = (props) => {
             src={props.imgSrc}
             alt={props.alt}
           />
-          {/* <div id = "headerJumbotronText">{headlineText}</div> */}
         </Container>
       </Jumbotron>
     </div>

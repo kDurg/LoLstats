@@ -53,7 +53,7 @@ export default class App extends React.Component {
 
   componentDidUpdate() {
 
-    console.log('App State Updated: ', this.state)
+    // console.log('App State Updated: ', this.state)
     // if (this.state.data.userName !== null && !this.state.data.matches.liveMatch.liveStatus){
     //   this.updateLiveData();
     // }
@@ -61,7 +61,7 @@ export default class App extends React.Component {
 
   updateAppState(state, updatedData) {
 
-    console.log('updateAppState: ', state, updatedData)
+    // console.log('updateAppState: ', state, updatedData)
     const data = {...this.state.data};
 
     switch(state) {
@@ -77,7 +77,7 @@ export default class App extends React.Component {
 
       case 'recentMatch':
         data.matches = updatedData;
-        console.log('Data in state recent match', this.state)
+        // console.log('Data in state recent match', this.state)
         this.setState({data})
       break;
 
@@ -102,7 +102,7 @@ export default class App extends React.Component {
       // GET LIVE GAME DATA
       axios.get(liveGameData).then(res => {
         axiosResponse = res.status;
-        console.log('Response: ', res, " and axiosResponse: ", axiosResponse)
+        // console.log('Response: ', res, " and axiosResponse: ", axiosResponse)
         if (axiosResponse === 200) {
           console.log('Successful Live Game Response! ', res)
           responseData = ({

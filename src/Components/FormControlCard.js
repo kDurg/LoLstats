@@ -4,13 +4,13 @@ import { Col, Row, Button, Input, Table } from 'reactstrap';
 
 import { Card, CardContent, CardMedia, Container } from '@material-ui/core';
 
-let useStyles = makeStyles({
+const useStyles = makeStyles({
   awards: {
     color: 'red',
     fontSize: '15px'
   },
   card: {
-    maxWidth: 400,
+    maxWidth: 450,
     margin: 10,
     padding: 10
   },
@@ -191,9 +191,8 @@ const FormControlCard = (props) => {
 
     case 'tableStats':
 
-
       let tableColor = {
-        background: props.team
+        background: props.teamColor
       }
 
       // const populatePlayersToTable = (props) =>{
@@ -211,16 +210,17 @@ const FormControlCard = (props) => {
       //     );
       //   })
       // }
+
       classes = useStyles();
       let winStatus = false;
-      // props.recentMatchPlayersData[0].stats.win ? winStatus=true : winStatus=false
-      // winStatus ? winStatus = 'WIN': winStatus ='LOSS'
+      props.recentMatchPlayersData[0].stats.win ? winStatus=true : winStatus=false
+      winStatus ? winStatus = 'WIN': winStatus ='LOSS'
 
       return (
         <>
           <Card className={classes.card}>
             <Table style={tableColor} size='sm' dark>
-              <thead>
+              <thead className={classes.subStatHeader}>
                 <tr>
                   <th><h6>{props.team} Team: {winStatus}</h6></th>
                   <th>Level</th>
@@ -230,7 +230,7 @@ const FormControlCard = (props) => {
                   <th>Damage</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className={classes.text}>
                 <tr>
                   <td>{props.recentMatchPlayersData[0].summonerName}</td>
                   <td>{props.recentMatchPlayersData[0].stats.champLevel}</td>
@@ -276,25 +276,6 @@ const FormControlCard = (props) => {
           </Card>
         </>
       );
-
-
-    case 'recentTeamStats':
-
-      return (
-        <>
-          <Card className={classes.card}>
-            <CardContent>
-              <Row>
-                <Col sm='1' className={classes.imageCol}><img className={classes.iconMediaSmall} src="http://ddragon.leagueoflegends.com/cdn/0.151.2/img/item/3132.png" /></Col>
-                <Col sm='5'><p className={classes.text}>Kills: 10 | Deaths: 1 | Assists: 6</p></Col>
-                <Col sm='3'><p className={classes.text}>CS: 210</p></Col>
-                <Col sm='3'><p className={classes.text}>Gold: 5800</p></Col>
-              </Row>
-            </CardContent>
-          </Card>
-        </>
-      )
-
 
     case 'inputAndSubmit':
       classes = useStyles();
