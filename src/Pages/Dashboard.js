@@ -199,6 +199,7 @@ export default class Dashboard extends React.Component {
   handleSubmit(event) {
 
     event.preventDefault();
+    this.setState({recentGameRequestFinished:false});
     this.getSummonerData(this.state.player.searchName);
   }
 
