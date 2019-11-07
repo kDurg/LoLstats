@@ -162,9 +162,9 @@ export default class Dashboard extends React.Component {
                 stats = gameData.stats;
                 team = gameData.teamId
               }
-              
+
             })
-            
+
             playerData = {
               participantId,
               stats,
@@ -172,18 +172,17 @@ export default class Dashboard extends React.Component {
               team
             }
 
-            if(playerData.team === 100){
+            if (playerData.team === 100) {
               blueTeam.push(playerData);
-            } else if (playerData.team === 200){
+            } else if (playerData.team === 200) {
               redTeam.push(playerData)
             }
 
-            allPlayerCharacterData.push(blueTeam, redTeam);
           });
-console.log(allPlayerCharacterData)
-          // recentMatchPlayerStats.recentMatch.allPlayerCharacterData = allPlayerCharacterData;
-          // this.props.updateAppState('recentMatch', recentMatchPlayerStats);
-          // this.setState({recentGameRequestFinished:true})
+          allPlayerCharacterData.push({ blueTeam, redTeam });
+          recentMatchPlayerStats.recentMatch.allPlayerCharacterData = allPlayerCharacterData[0];
+          this.props.updateAppState('recentMatch', recentMatchPlayerStats);
+          this.setState({ recentGameRequestFinished: true })
         }
 
       }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err));
@@ -225,49 +224,49 @@ console.log(allPlayerCharacterData)
   showRecentGameCard() {
 
     let matches = this.props.state.data.matches;
-      return (
-        <>
-          <div className='recentQuickStats'>
-            <Row>
-              {this.showCurrentLiveGameCard}
-              <Container>
-                <Row>
-                  <Col>
-                    <FormControlCard
-                      formControl='characterTile'
-                      image={matches.recentMatch.characterDetails ? matches.recentMatch.characterDetails : null}
-                      recentMatch={matches.recentMatch}
-                    />
-                  </Col>
+    return (
+      <>
+        <div className='recentQuickStats'>
+          <Row>
+            {this.showCurrentLiveGameCard}
+            <Container>
+              <Row>
+                <Col>
+                  <FormControlCard
+                    formControl='characterTile'
+                    // image={matches.recentMatch.characterDetails ? matches.recentMatch.characterDetails : null}
+                    recentMatch={matches.recentMatch}
+                  />
+                </Col>
 
-                  <Container>
-                    <Row>
-                      <Col>
-                        <FormControlCard
-                          formControl='tableStats'
-                          recentMatchPlayersData={matches.recentMatch}
-                          team='Red Team'
-                        />
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <FormControlCard
-                          formControl='tableStats'
-                          recentMatchPlayersData={matches.recentMatch}
-                          team='Blue Team'
-                        />
-                      </Col>
-                    </Row>
-                  </Container>
+                <Container>
+                  <Row>
+                    <Col>
+                      <FormControlCard
+                        formControl='tableStats'
+                        // recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.blueTeam}
+                        team='Blue'
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <FormControlCard
+                        formControl='tableStats'
+                        // recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.redTeam}
+                        team='Red'
+                      />
+                    </Col>
+                  </Row>
+                </Container>
 
 
-                </Row>
-              </Container>
-            </Row>
-          </div>
-        </>
-      )
+              </Row>
+            </Container>
+          </Row>
+        </div>
+      </>
+    )
   }
 
   render() {
@@ -290,7 +289,8 @@ console.log(allPlayerCharacterData)
                 />
               </Col>
             </Row>
-            {this.state.recentGameRequestFinished ? this.showRecentGameCard(): null}
+            {/* {this.state.recentGameRequestFinished ? this.showRecentGameCard() : null} */}
+            {this.showRecentGameCard()}
           </Container>
         </div>
 
