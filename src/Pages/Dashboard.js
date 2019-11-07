@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from "axios";
 
-import { Container, Row, Col, Table, Card } from 'reactstrap';
+import { Container, Row, Col} from 'reactstrap';
 
 import FormControlCard from '../Components/FormControlCard'
 
@@ -72,7 +72,6 @@ export default class Dashboard extends React.Component {
               that.getMostRecentMatchData(responseData.matches.allMatches[0].gameId);
             }
             // this.props.updateLiveData();
-            // }).catch(err => console.log(`HTTP Response :${axiosResponse} | Error: `, err.response.status));
           }).catch(err => console.log(err));
           console.log('100 games Summoner Data', responseData)
         }
@@ -212,7 +211,7 @@ export default class Dashboard extends React.Component {
               <FormControlCard
                 formControl='quickLiveStats'
                 liveData={this.props.state.data.matches.liveMatch}
-              // liveStatus= {this.props.state.data.matches.liveMatch.liveStatus}
+                liveStatus={this.props.state.data.matches.liveMatch.liveStatus}
               />
             </div>
           </Col>
@@ -224,6 +223,24 @@ export default class Dashboard extends React.Component {
   showRecentGameCard() {
 
     let matches = this.props.state.data.matches;
+    let characterData = this.props.state.data.characterData;
+    let characterDetails = [];
+    let characterName = matches.recentMatch.characterDetails.name;
+
+    // characterData.forEach(character =>{
+    //   if (characterName === characterData.name){
+    //     characterDetails.push(character);
+    //     return;
+    //   }
+    // });
+
+    Object.values(characterData).forEach(character => {
+      if (character.name === characterName) {
+        characterDetails.push(character);
+        return;
+      }
+    })
+    
     return (
       <>
         <div className='recentQuickStats'>
@@ -233,8 +250,9 @@ export default class Dashboard extends React.Component {
               <Row>
                 <Col>
                   <FormControlCard
+                    characterDetails={characterDetails[0]}
                     formControl='characterTile'
-                    // image={matches.recentMatch.characterDetails ? matches.recentMatch.characterDetails : null}
+                    image={matches.recentMatch.characterDetails ? matches.recentMatch.characterDetails : null}
                     recentMatch={matches.recentMatch}
                   />
                 </Col>
@@ -244,7 +262,7 @@ export default class Dashboard extends React.Component {
                     <Col>
                       <FormControlCard
                         formControl='tableStats'
-                        // recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.blueTeam}
+                        recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.blueTeam}
                         team='Blue'
                       />
                     </Col>
@@ -253,7 +271,7 @@ export default class Dashboard extends React.Component {
                     <Col>
                       <FormControlCard
                         formControl='tableStats'
-                        // recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.redTeam}
+                        recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.redTeam}
                         team='Red'
                       />
                     </Col>
@@ -289,8 +307,8 @@ export default class Dashboard extends React.Component {
                 />
               </Col>
             </Row>
-            {/* {this.state.recentGameRequestFinished ? this.showRecentGameCard() : null} */}
-            {this.showRecentGameCard()}
+            {this.state.recentGameRequestFinished ? this.showRecentGameCard() : null}
+            {/* {this.showRecentGameCard()} */}
           </Container>
         </div>
 

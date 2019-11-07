@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Col, Row, Button, Input, Table } from 'reactstrap';
 
-import { Card, CardActionArea, CardContent, CardMedia, Container } from '@material-ui/core';
+import { Card, CardContent, CardMedia, Container } from '@material-ui/core';
 
 let useStyles = makeStyles({
   awards: {
@@ -23,6 +23,12 @@ let useStyles = makeStyles({
   iconMediaSmall: {
     height: 20,
     width: 20
+  },
+  inputField:{
+    margin: '10px',
+    alignContent: "center",
+    display: 'center',
+    float: 'none'
   },
   imageCol: {
     margin: 0,
@@ -61,11 +67,11 @@ const FormControlCard = (props) => {
       let classes = useStyles();
       let recentGameStats = props.recentMatch.gameStats;
       let recentChampData = props.recentMatch.characterDetails;
-      let characterImagePath = `http://ddragon.leagueoflegends.com/cdn/9.21.1/img/champion/Neeko.png`;
-      // let characterImagePath = `http://ddragon.leagueoflegends.com/cdn/9.21.1/img/champion/${recentChampData.name}.png`;
+      // let characterImagePath = `http://ddragon.leagueoflegends.com/cdn/9.21.1/img/champion/Neeko.png`;
+      let characterImagePath = `http://ddragon.leagueoflegends.com/cdn/9.21.1/img/champion/${recentChampData.name}.png`;
       // let runeImagePath = ``;
       // let itemImagePath = `http://ddragon.leagueoflegends.com/cdn/0.151.2/img/item/{recentGameStats.item0}.png`;
-      // console.log("FCC props", props.recentMatch, props)
+      // console.log("FCC props", props.characterDetails)
       return (
         <Card className={classes.card}>
 
@@ -82,9 +88,11 @@ const FormControlCard = (props) => {
                 <Row><b>{recentChampData.name ? recentChampData.name : 'Neeko'}</b></Row>
               </Col>
               <Col>
-                <Row className={classes.text}><b>K/D/A: </b>  {recentGameStats.kills}/{recentGameStats.deaths}/{recentGameStats.assists}</Row>
-                <Row className={classes.text}><b>Gold: </b>  {recentGameStats.goldEarned}</Row>
-                <Row className={classes.text}><b>CS: </b>  {recentGameStats.totalMinionsKilled}</Row>
+                {/* <Row className={classes.text}><b>K/D/A: </b>&nbsp;{recentGameStats.kills}/{recentGameStats.deaths}/{recentGameStats.assists}</Row>
+                <Row className={classes.text}><b>Gold: </b>&nbsp;{recentGameStats.goldEarned}</Row>
+                <Row className={classes.text}><b>CS: </b>&nbsp;{recentGameStats.totalMinionsKilled}</Row> */}
+                <Row className={classes.statHeader}><b>Character Description:</b></Row>
+                <Row className={classes.text}>{props.characterDetails.blurb}</Row>
                 {recentGameStats.win ? <Row className={classes.awards}><b>WIN</b></Row> : null}
                 {recentGameStats.firstBloodKill ? <Row className={classes.awards}><b>FIRST BLOOD</b></Row> : null}
                 {recentGameStats.firstTowerKill ? <Row className={classes.awards}><b>FIRST TOWER</b></Row> : null}
@@ -96,12 +104,12 @@ const FormControlCard = (props) => {
             <Row className={classes.statHeader}><b>Items:</b></Row>
             <Col>
               <Row>
-                <Col className={classes.imageCol}><img alt={recentGameStats.item0} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item0 ? recentGameStats.item0 : null}.png`} /></Col>
-                <Col className={classes.imageCol}><img alt={recentGameStats.item1} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item1 ? recentGameStats.item1 : null}.png`} /></Col>
-                <Col className={classes.imageCol}><img alt={recentGameStats.item2} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item2 ? recentGameStats.item2 : null}.png`} /></Col>
-                <Col className={classes.imageCol}><img alt={recentGameStats.item3} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item3 ? recentGameStats.item3 : null}.png`} /></Col>
-                <Col className={classes.imageCol}><img alt={recentGameStats.item4} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item4 ? recentGameStats.item4 : null}.png`} /></Col>
-                <Col className={classes.imageCol}><img alt={recentGameStats.item5} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item5 ? recentGameStats.item5 : null}.png`} /></Col>
+                {recentGameStats.item0 !== 0 ? <Col className={classes.imageCol}><img alt={recentGameStats.item0} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item0}.png`} /></Col> : null}
+                {recentGameStats.item1 !== 0 ? <Col className={classes.imageCol}><img alt={recentGameStats.item1} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item1}.png`} /></Col> : null}
+                {recentGameStats.item2 !== 0 ? <Col className={classes.imageCol}><img alt={recentGameStats.item2} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item2}.png`} /></Col> : null}
+                {recentGameStats.item3 !== 0 ? <Col className={classes.imageCol}><img alt={recentGameStats.item3} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item3}.png`} /></Col> : null}
+                {recentGameStats.item4 !== 0 ? <Col className={classes.imageCol}><img alt={recentGameStats.item4} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item4}.png`} /></Col> : null}
+                {recentGameStats.item5 !== 0 ? <Col className={classes.imageCol}><img alt={recentGameStats.item5} className={classes.iconMedia} src={`http://ddragon.leagueoflegends.com/cdn/9.20.1/img/item/${recentGameStats.item5}.png`} /></Col> : null}
               </Row>
             </Col>
             <hr />
@@ -139,12 +147,6 @@ const FormControlCard = (props) => {
       )
 
     case 'quickLiveStats':
-      // console.log('FCC props: ', props)
-      // let characterIcon;
-      // let liveKDA;
-      // let liveItems;
-      // let liveSummonerSpells;
-      // let liveRunes;
 
       if (props.liveData.liveStatus) {
         let secondsInGame = props.liveData.liveData.gameLength + 240;
@@ -230,7 +232,7 @@ const FormControlCard = (props) => {
               </thead>
               <tbody>
                 <tr>
-                  {/* <td>{props.recentMatchPlayersData[0].summonerName}</td>
+                  <td>{props.recentMatchPlayersData[0].summonerName}</td>
                   <td>{props.recentMatchPlayersData[0].stats.champLevel}</td>
                   <td>{props.recentMatchPlayersData[0].stats.kills}/ {props.recentMatchPlayersData[0].stats.deaths} / {props.recentMatchPlayersData[0].stats.assists}</td>
                   <td>{props.recentMatchPlayersData[0].stats.totalMinionsKilled}</td>
@@ -267,7 +269,7 @@ const FormControlCard = (props) => {
                   <td>{props.recentMatchPlayersData[4].stats.kills}/ {props.recentMatchPlayersData[4].stats.deaths} / {props.recentMatchPlayersData[4].stats.assists}</td>
                   <td>{props.recentMatchPlayersData[4].stats.totalMinionsKilled}</td>
                   <td>{props.recentMatchPlayersData[4].stats.goldEarned}</td>
-                  <td>{props.recentMatchPlayersData[4].stats.totalDamageDealtToChampions}</td> */}
+                  <td>{props.recentMatchPlayersData[4].stats.totalDamageDealtToChampions}</td>
                 </tr>
               </tbody>
             </Table>
@@ -295,9 +297,11 @@ const FormControlCard = (props) => {
 
 
     case 'inputAndSubmit':
+      classes = useStyles();
+
       return (
-        <Row>
-          <Col>
+        <Row className={classes.inputField}>
+          <Col md={{size:4 , offset:3}}>
             <Input
               type={props.type}
               placeholder={props.placeholder}
