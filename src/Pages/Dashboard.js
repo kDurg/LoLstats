@@ -270,7 +270,7 @@ export default class Dashboard extends React.Component {
                           formControl='tableStats'
                           recentMatchPlayersData={matches.recentMatch.allPlayerCharacterData.redTeam}
                           team='Red'
-                          teamColor='rgba(227,11,93)'
+                          teamColor='rgba(153,0,0)'
                         />
                       </Col>
                     </Row>
