@@ -30,9 +30,10 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "description": "Stats tracking for League of Legends using the Riot API",
+  "description": "Full-Stack stat tracking for League of Legends using the Riot API",
   "main": "index.js",
   "repository": "git@github.com:kDurg/LoLstats.git",
   "author": "Kyle Durigan",
-  "license": "MIT"
+  "license": "MIT",
+  "proxy": "http://localhost:3000"
 }

@@ -7,13 +7,14 @@ import NavBar from './Components/NavBar';
 import HomeImage from './assets/dragonImage.jpg';
 import Dashboard from './Pages/Dashboard';
 import axios from 'axios';
+// import Server from '../server/server';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);  
     this.state = {
       apiData: {
-        apiKey: 'RGAPI-ca29112a-8a61-4482-82a4-19711da3bbee',
+        apiKey: 'RGAPI-33e98ff1-63ad-4a1e-965e-d741d155c223',
         baseURL: 'https://na1.api.riotgames.com/',
         corsAnywhere: 'https://cors-anywhere.herokuapp.com/',
       },
@@ -46,7 +47,11 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    // fetch('/users')
+    //   .then(res=>console.log(res.json()) )
 
+    
+      // .then(users =>console.log('Users', users))
     // console.log('component did mount state: ', this.state);
     this.updateCharacterJSON();
   }
