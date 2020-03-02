@@ -1,68 +1,30 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# LoLstats:
 
-## Available Scripts
+### The Why:
 
-In the project directory, you can run:
+A few years back, I randomly heard about a game that a few co-workers played. They mentioned a game called League of Legends which is a game I hadnt heard of previously. After looking up some reviews, I found out that League of Legends was considered one of the largest e-sports games around and actually had a larger viewership for their championship matches (around the world) than the Superbowl. 
 
-### `npm start`
+Fast forward a few years and I am still playing League of Legends. Because of the massive amount of characters, character abilities, items, item abilities, etc... the game always seems to be changing, and I wanted a way to track my progress as I continued to play and evolve my play style. This is where LoLstats became a reality.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### The Purpose:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Because of my love for stats and trends, I wanted to create an application that could help me see specific stats in a quick glance. To start, the layout just had to be simple and easy to read so that I could quickly look up my previous stats, as well as my opponents while the next game loaded. From there, I decided that I wanted more information and wanted to build out basic trends based on previous games. This is when I decided to move this from a front-end React application to a full stack application involving a Node.js API and SQL database. 
 
-### `npm test`
+### How It Works:
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Functionality is meant to be extremely simple. Just enter in a username and press search. You will get a screen like the one below that gives you data back from the Riot (the company behind League of Legends) API and automatically displays the required data. 
 
-### `npm run build`
+![https://github.com/kDurg/LoLstats/blob/master/screenshots/lolStatsDashboard.PNG?raw=true](https://github.com/kDurg/LoLstats/blob/master/screenshots/lolStatsDashboard.PNG?raw=true)
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Tech And Challenges:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+This application has gone through a TON of changes since I first started to design it while I was attending a web development boot camp. Initially the application was created using HTML, CSS and Javascript, but then quickly became a React/ Express/ Node/ SQL program to improve performance and experience. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Because of the API structure and limits set by Riot games, I found myself having to be creative with storing data to be used for separate calls. To start receiving data, I needed to capture the username of the gamer, which would return a Riot-specific ID. With that ID, I could gather recent game information such as players in each game, win/loss status and basic stats. Using the user's ID in conjunction with a specific game ID (also Riot specific), I was able to get an in-depth breakdown of specific data, such as damage done, gold spent, and individual items that were used in the game by the user. Finally, after receiving all that data, I was able to query another API (data dragon) which returned assets such as character images, item images and description data. Because of all these API calls and basic logic methods, the front-end started to slow down which sparked the idea to set up a server that would not only take care of required data handling, but also to store data into a SQL database for faster data gathering and analyzation. 
 
-### `npm run eject`
+### Future Improvements:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- [ ]  Host front-end website (currently only runs locally)
+- [ ]  Bridge Front-end with API and Database
+- [ ]  Create login page with 1st time data grabs to build Trends page
+- [ ]  Tie Trends page to Live-game page
