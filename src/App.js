@@ -13,7 +13,7 @@ export default class App extends React.Component {
     super(props);  
     this.state = {
       apiData: {
-        apiKey: 'RGAPI-995a4d82-d0f4-4949-8206-3039e778aa5b',
+        apiKey: 'RGAPI-5b42b71f-87e3-43c3-82a9-9dc61b68999b',
         baseURL: 'https://na1.api.riotgames.com/',
         corsAnywhere: 'https://cors-anywhere.herokuapp.com/',
       },
