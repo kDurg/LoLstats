@@ -1,5 +1,9 @@
 # LoLstats:
 
+
+## UPDATE:
+After taking a break from this project to work on others, I have decided to shift the goals of this project. For now, I will focus less on scalability and more on making personal reports and keeping stats from all of my own games. Once I can prove this helpful to players, I will continue to expand functionality and focus on server-side logic.
+
 ### The Why:
 
 A few years back, I randomly heard about a game that a few co-workers played. They mentioned a game called League of Legends which is a game I hadnt heard of previously. After looking up some reviews, I found out that League of Legends was considered one of the largest e-sports games around and actually had a larger viewership for their championship matches (around the world) than the Superbowl. 
